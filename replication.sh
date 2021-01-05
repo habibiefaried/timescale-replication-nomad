@@ -4,7 +4,7 @@ id
 echo "nameserver 172.18.0.1" > /etc/resolv.conf || true
 
 # CONFIGURE PRIMARY AND IF FILE ${PGDATA}/initmasterdone NOT FOUND
-if [[ -z $REPLICATE_FROM ]] && [[! -f ${PGDATA}/initmasterdone]]; then
+if [ -z $REPLICATE_FROM ] && [ ! -f ${PGDATA}/initmasterdone ]; then
 
 psql -U postgres -c "SET password_encryption = 'scram-sha-256'; CREATE ROLE $REPLICA_POSTGRES_USER WITH REPLICATION PASSWORD '$REPLICA_POSTGRES_PASSWORD' LOGIN;"
 
