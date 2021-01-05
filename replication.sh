@@ -41,6 +41,7 @@ else
 
 # Stop postgres instance and clear out PGDATA
 pg_ctl -D ${PGDATA} -m fast -w stop
+ls -lah ${PGDATA}
 rm -rf ${PGDATA} || true
 
 # Create a pg pass file so pg_basebackup can send a password to the primary
@@ -75,3 +76,7 @@ chmod 0600 ${PGDATA}/standby.signal
 pg_ctl -D ${PGDATA} -w start
 
 fi
+
+## Fix the resolv.conf
+echo "Fix resolv.conf"
+echo "nameserver 172.18.0.1" > /etc/resolv.conf
