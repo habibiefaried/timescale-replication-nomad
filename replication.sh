@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# CONFIGURE PRIMARY
-if [[ -z $REPLICATE_FROM ]]; then
+id
+echo "nameserver 172.18.0.1" > /etc/resolv.conf || true
+
+# CONFIGURE PRIMARY AND IF FILE ${PGDATA}/initmasterdone NOT FOUND
+if [[ -z $REPLICATE_FROM ]] && [[! -f ${PGDATA}/initmasterdone]]; then
 
 psql -U postgres -c "SET password_encryption = 'scram-sha-256'; CREATE ROLE $REPLICA_POSTGRES_USER WITH REPLICATION PASSWORD '$REPLICA_POSTGRES_PASSWORD' LOGIN;"
 
@@ -36,6 +39,7 @@ EOF
 pg_ctl -D ${PGDATA} -m fast -w restart
 psql -U postgres -c "SELECT * FROM pg_create_physical_replication_slot('${REPLICA_NAME}_slot');"
 
+echo "Done at $(date)" > ${PGDATA}/initmasterdone
 # CONFIGURE REPLICA
 else
 
@@ -76,7 +80,3 @@ chmod 0600 ${PGDATA}/standby.signal
 pg_ctl -D ${PGDATA} -w start
 
 fi
-
-## Fix the resolv.conf
-echo "Fix resolv.conf"
-echo "nameserver 172.18.0.1" > /etc/resolv.conf
