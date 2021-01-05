@@ -41,7 +41,6 @@ else
 
 # Stop postgres instance and clear out PGDATA
 pg_ctl -D ${PGDATA} -m fast -w stop
-ls -lah ${PGDATA}
 rm -rf ${PGDATA} || true
 
 # Create a pg pass file so pg_basebackup can send a password to the primary
@@ -64,8 +63,7 @@ done
 rm ~/.pgpass.conf
 
 # Create the recovery.conf file so the backup knows to start in recovery mode
-cat > ${PGDATA}/recovery.conf <<EOF
-standby_mode = on
+cat > ${PGDATA}/standby.signal <<EOF
 primary_conninfo = 'host=${REPLICATE_FROM} port=5432 user=${POSTGRES_USER} password=${POSTGRES_PASSWORD} application_name=${REPLICA_NAME}'
 primary_slot_name = '${REPLICA_NAME}_slot'
 EOF
