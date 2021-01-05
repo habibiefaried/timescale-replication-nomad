@@ -62,15 +62,15 @@ done
 # Remove pg pass file -- it is not needed after backup is restored
 rm ~/.pgpass.conf
 
-# Create the recovery.conf file so the backup knows to start in recovery mode
+# Create the standby.signal file so the backup knows to start in recovery mode
 cat > ${PGDATA}/standby.signal <<EOF
 primary_conninfo = 'host=${REPLICATE_FROM} port=5432 user=${POSTGRES_USER} password=${POSTGRES_PASSWORD} application_name=${REPLICA_NAME}'
 primary_slot_name = '${REPLICA_NAME}_slot'
 EOF
 
-# Ensure proper permissions on recovery.conf
-chown postgres:postgres ${PGDATA}/recovery.conf
-chmod 0600 ${PGDATA}/recovery.conf
+# Ensure proper permissions on standby.signal
+chown postgres:postgres ${PGDATA}/standby.signal
+chmod 0600 ${PGDATA}/standby.signal
 
 pg_ctl -D ${PGDATA} -w start
 
