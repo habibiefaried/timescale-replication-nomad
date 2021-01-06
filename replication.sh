@@ -90,4 +90,3 @@ chmod 0600 ${PGDATA}/recovery.conf
 pg_ctl -D ${PGDATA} -w start
 
 fi
-fi
