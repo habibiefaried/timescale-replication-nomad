@@ -52,6 +52,9 @@ fi
 # CONFIGURE REPLICA
 else
 
+# RUN IF FILE ${PGDATA}/initrepdone NOT FOUND
+if [ ! -f ${PGDATA}/initrepdone ]; then 
+
 # Stop postgres instance and clear out PGDATA
 pg_ctl -D ${PGDATA} -m fast -w stop
 ls -lah ${PGDATA}
@@ -86,7 +89,10 @@ EOF
 # Ensure proper permissions on recovery.conf
 chown postgres:postgres ${PGDATA}/recovery.conf
 chmod 0600 ${PGDATA}/recovery.conf
+echo "Done at $(date)" > ${PGDATA}/initrepdone
 
 pg_ctl -D ${PGDATA} -w start
+
+fi
 
 fi
