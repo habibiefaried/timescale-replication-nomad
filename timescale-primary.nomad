@@ -36,9 +36,10 @@ job "timescale-primary" {
         REPLICA_POSTGRES_USER = "repuser"
         REPLICA_POSTGRES_PASSWORD = "repuser21"
         PGDATA = "/var/lib/postgresql/data/pgdata"
+        REPLICATE_TO=timescale-replica.service.consul
         REPLICATION_SUBNET = "0.0.0.0/0"
-        REPLICA_NAME = "timescalereplica"
-        SYNCHRONOUS_COMMIT = "on"
+        REPLICA_NAME = "r1"
+        SYNCHRONOUS_COMMIT = "off"
       }
 
       config {

@@ -34,7 +34,7 @@ job "timescale-replica" {
         POSTGRES_USER = "repuser"
         POSTGRES_PASSWORD = "repuser21"
         PGDATA = "/var/lib/postgresql/data/pgdata"
-        REPLICA_NAME = "timescalereplica"
+        REPLICA_NAME = "r1"
         REPLICATE_FROM = "timescale-primary.service.consul"
       }
 
