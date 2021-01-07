@@ -1,8 +1,5 @@
 #!/bin/bash
 
-id
-echo "nameserver 172.18.0.1" > /etc/resolv.conf || true
-
 # CONFIGURE PRIMARY 
 if [ -z $REPLICATE_FROM ]; then
 
@@ -58,7 +55,7 @@ if [ ! -f ${PGDATA}/initrepdone ]; then
 # Stop postgres instance and clear out PGDATA
 pg_ctl -D ${PGDATA} -m fast -w stop
 ls -lah ${PGDATA}
-rm -rf ${PGDATA} || true
+rm -rf ${PGDATA}/*
 
 # Create a pg pass file so pg_basebackup can send a password to the primary
 cat > ~/.pgpass.conf <<EOF
