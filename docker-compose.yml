@@ -6,9 +6,9 @@ services:
     environment:
         REPLICATION_SUBNET: "0.0.0.0/0"
         POSTGRES_USER: "postgres"
-        POSTGRES_PASSWORD: "postgres"
+        POSTGRES_PASSWORD: "PostGr3s2021"
         REPLICA_POSTGRES_USER: "repuser"
-        REPLICA_POSTGRES_PASSWORD: "repuser"
+        REPLICA_POSTGRES_PASSWORD: "r3Puser"
         PGDATA: "/var/lib/postgresql/data/pgdata"
         REPLICA_NAME: "r1"
         SYNCHRONOUS_COMMIT: "off"
@@ -17,7 +17,7 @@ services:
     image: habibiefaried/timescale-replication:latest
     environment:
         POSTGRES_USER: "repuser"
-        POSTGRES_PASSWORD: "repuser"
+        POSTGRES_PASSWORD: "r3Puser"
         PGDATA: "/var/lib/postgresql/data/pgdata"
         REPLICA_NAME: "r1"
         REPLICATE_FROM: "timescale-primary"
@@ -27,12 +27,14 @@ services:
     environment:
         PGPOOL_BACKEND_NODES: "0:timescale-primary:5432,1:timescale-replica:5432"
         PGPOOL_SR_CHECK_USER: "repuser"
-        PGPOOL_SR_CHECK_PASSWORD: "repuser"
+        PGPOOL_SR_CHECK_PASSWORD: "r3Puser"
         PGPOOL_ENABLE_LDAP: "no"
         PGPOOL_POSTGRES_USERNAME: "postgres"
-        PGPOOL_POSTGRES_PASSWORD: "postgres"
+        PGPOOL_POSTGRES_PASSWORD: "PostGr3s2021"
         PGPOOL_ADMIN_USERNAME: "admin"
         PGPOOL_ADMIN_PASSWORD: "admin"
+    ports:
+        - 54320:5432
 
   timescale-admin:
     image: dockage/phppgadmin
