@@ -2,7 +2,7 @@ version: '3'
 
 services:
   timescale-primary:
-    image: timescale-replication:latest
+    image: habibiefaried/timescale-replication:latest
     environment:
         REPLICATION_SUBNET: "0.0.0.0/0"
         POSTGRES_USER: "postgres"
@@ -14,7 +14,7 @@ services:
         SYNCHRONOUS_COMMIT: "off"
 
   timescale-replica:
-    image: timescale-replication:latest
+    image: habibiefaried/timescale-replication:latest
     environment:
         POSTGRES_USER: "repuser"
         POSTGRES_PASSWORD: "repuser"
