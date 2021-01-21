@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  timescale-primary:
+    image: habibiefaried/timescale-replication:v12
+    environment:
+        REPLICATION_SUBNET: "0.0.0.0/0"
+        POSTGRES_USER: "postgres"
+        POSTGRES_PASSWORD: "PostGr3s2021"
+        REPLICA_POSTGRES_USER: "repuser"
+        REPLICA_POSTGRES_PASSWORD: "r3Puser"
+        PGDATA: "/var/lib/postgresql/data/pgdata"
+        REPLICA_NAME: "r1"
+        SYNCHRONOUS_COMMIT: "off"
+
+  timescale-replica:
+    image: habibiefaried/timescale-replication:v12
+    environment:
+        POSTGRES_USER: "repuser"
+        POSTGRES_PASSWORD: "r3Puser"
+        PGDATA: "/var/lib/postgresql/data/pgdata"
+        REPLICA_NAME: "r1"
+        REPLICATE_FROM: "timescale-primary"
+
+  timescale-proxy:
+    image: bitnami/pgpool:4
+    environment:
+        PGPOOL_BACKEND_NODES: "0:timescale-primary:5432,1:timescale-replica:5432"
+        PGPOOL_SR_CHECK_USER: "repuser"
+        PGPOOL_SR_CHECK_PASSWORD: "r3Puser"
+        PGPOOL_ENABLE_LDAP: "no"
+        PGPOOL_POSTGRES_USERNAME: "postgres"
+        PGPOOL_POSTGRES_PASSWORD: "PostGr3s2021"
+        PGPOOL_ADMIN_USERNAME: "admin"
+        PGPOOL_ADMIN_PASSWORD: "admin"
+    ports:
+        - 54320:5432
+
+  timescale-admin:
+    image: dockage/phppgadmin
+    environment:
+        PHP_PG_ADMIN_SERVER_HOST: "timescale-proxy"
+        PHP_PG_ADMIN_SERVER_PORT: "5432"
+        PHP_PG_ADMIN_DEFAULT_LANG: "english"
+    ports:
+        - 50080:80
