@@ -85,10 +85,10 @@ echo "Done at $(date)" > ${PGDATA}/initrepdone
 
 pg_ctl -D ${PGDATA} -w start
 
-fi
-
 else
 echo "It's (replica) already initialized"
 cat ${PGDATA}/initrepdone
+
+fi
 
 fi
