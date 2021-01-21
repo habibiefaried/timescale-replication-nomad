@@ -12,6 +12,8 @@ services:
         PGDATA: "/var/lib/postgresql/data/pgdata"
         REPLICA_NAME: "r1"
         SYNCHRONOUS_COMMIT: "off"
+    volumes:
+        - timescale-primary:/var/lib/postgresql/data
 
   timescale-replica:
     image: habibiefaried/timescale-replication:v12
@@ -21,6 +23,8 @@ services:
         PGDATA: "/var/lib/postgresql/data/pgdata"
         REPLICA_NAME: "r1"
         REPLICATE_FROM: "timescale-primary"
+    volumes:
+        - timescale-replica:/var/lib/postgresql/data
 
   timescale-proxy:
     image: bitnami/pgpool:4
@@ -44,3 +48,6 @@ services:
         PHP_PG_ADMIN_DEFAULT_LANG: "english"
     ports:
         - 50080:80
+volumes:
+  timescale-primary:
+  timescale-replica:
